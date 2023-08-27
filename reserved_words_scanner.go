@@ -21,6 +21,21 @@ func init() {
 	RESERVE_WORDS["var"] = VAR
 	RESERVE_WORDS["while"] = WHILE
 }
-func (s *Scanner) getIdentifier() {
+func (s *Scanner) parseIdentifier() {
+	for {
+		if s.isAlphaNumeric(s.peek()) {
+			s.advanceCharacter()
+			continue
+		}
 
+		keyword := s.Source[s.start:s.current]
+		identifier, ok := RESERVE_WORDS[keyword]
+		if ok {
+			s.AddToken(identifier)
+		} else {
+			s.AddToken(IDENTIFIER)
+		}
+
+		break
+	}
 }
