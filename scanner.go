@@ -1,5 +1,13 @@
 package main
 
+<<<<<<< HEAD
+=======
+import (
+	"fmt"
+	"unicode"
+)
+
+>>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
 type Scanner struct {
 	Source  string
 	Tokens  []TokenType
@@ -105,11 +113,84 @@ func (s *Scanner) ScanToken() {
 	case '\n':
 		s.line++
 		break
+<<<<<<< HEAD
 	default:
+=======
+	case '"':
+		for {
+			if s.peek() != '"' && !s.IsAtEnd() {
+				if s.peek() != '\n' {
+					s.line++
+				}
+
+				s.advanceCharacter()
+
+			} else {
+				break
+			}
+
+		}
+
+		if s.IsAtEnd() {
+			ReportError(s.line, "String without closing parenthesis")
+		}
+
+		val := s.Source[s.start+1 : s.current+1]
+		s.AddStringToken(STRING, val)
+	default:
+		if s.IsNumber(c) {
+			s.CaptureNumber()
+		} else if s.IsAlpha(c) {
+
+		} else {
+			ReportError(s.line, fmt.Sprintf("Unexpected character: %c", c))
+		}
+>>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
 
 	}
 }
 
+<<<<<<< HEAD
+=======
+/*
+*
+look ahead . characters is numbers.
+*/
+func (s *Scanner) peekNext() rune {
+	if s.current+1 >= len(s.Source) {
+		return rune(0)
+
+	}
+
+	return rune(s.Source[s.current+1])
+}
+
+func (s *Scanner) CaptureNumber() {
+	for {
+		if s.IsNumber(s.peek()) {
+			s.advanceCharacter()
+			if s.peek() == '.' && s.IsNumber(s.peekNext()) {
+				s.advanceCharacter()
+
+				for {
+					if s.IsNumber(s.peek()) {
+						s.advanceCharacter()
+					}
+				}
+			}
+		}
+	}
+}
+func (s *Scanner) IsNumber(c rune) bool {
+
+	return unicode.IsDigit(c)
+}
+
+func (s *Scanner) AddStringToken(t TOKEN, val string) {
+	s.Tokens = append(s.Tokens, NewTokenType(t, val, s.line))
+}
+
+>>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
 func (s *Scanner) advanceCharacter() rune {
 	s.current++
 	return rune(s.Source[s.current])
@@ -143,3 +224,16 @@ func (s *Scanner) peek() rune {
 
 	return rune(s.Source[s.current])
 }
+<<<<<<< HEAD
+=======
+
+func (s *Scanner) IsAlpha(c rune) bool {
+	return (c >= 'a' && c <= 'z') ||
+		(c >= 'A' && c <= 'Z') ||
+		c == '_'
+}
+
+func (s *Scanner) isAlphaNumeric(c rune) bool {
+	return s.IsAlpha(c) || s.IsNumber(c)
+}
+>>>>>>> a8c20af (add alphanumeric functions for reserved keywords)

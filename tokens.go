@@ -27,7 +27,12 @@ const (
 	IDENTIFIER
 	STRING
 	NUMBER
+<<<<<<< HEAD
 
+=======
+	FOR
+	NIL
+>>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
 	AND
 	CLASS
 	ELSE
