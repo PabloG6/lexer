@@ -21,6 +21,6 @@ func init() {
 	RESERVE_WORDS["var"] = VAR
 	RESERVE_WORDS["while"] = WHILE
 }
-func (s *Scanner) reservedWords() {
+func (s *Scanner) getIdentifier() {
 
 }
