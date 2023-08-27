@@ -1,13 +1,10 @@
 package main
 
-<<<<<<< HEAD
-=======
 import (
 	"fmt"
 	"unicode"
 )
 
->>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
 type Scanner struct {
 	Source  string
 	Tokens  []TokenType
@@ -113,9 +110,7 @@ func (s *Scanner) ScanToken() {
 	case '\n':
 		s.line++
 		break
-<<<<<<< HEAD
-	default:
-=======
+
 	case '"':
 		for {
 			if s.peek() != '"' && !s.IsAtEnd() {
@@ -145,13 +140,10 @@ func (s *Scanner) ScanToken() {
 		} else {
 			ReportError(s.line, fmt.Sprintf("Unexpected character: %c", c))
 		}
->>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
 
 	}
 }
 
-<<<<<<< HEAD
-=======
 /*
 *
 look ahead . characters is numbers.
@@ -190,7 +182,6 @@ func (s *Scanner) AddStringToken(t TOKEN, val string) {
 	s.Tokens = append(s.Tokens, NewTokenType(t, val, s.line))
 }
 
->>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
 func (s *Scanner) advanceCharacter() rune {
 	s.current++
 	return rune(s.Source[s.current])
@@ -224,8 +215,6 @@ func (s *Scanner) peek() rune {
 
 	return rune(s.Source[s.current])
 }
-<<<<<<< HEAD
-=======
 
 func (s *Scanner) IsAlpha(c rune) bool {
 	return (c >= 'a' && c <= 'z') ||
@@ -236,4 +225,3 @@ func (s *Scanner) IsAlpha(c rune) bool {
 func (s *Scanner) isAlphaNumeric(c rune) bool {
 	return s.IsAlpha(c) || s.IsNumber(c)
 }
->>>>>>> a8c20af (add alphanumeric functions for reserved keywords)
