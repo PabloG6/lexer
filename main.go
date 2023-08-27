@@ -45,6 +45,3 @@ func handleError(line int32, where string, message string) {
 	println("error occurred on line %d, %s. Error message: %s", line, where, message)
 	hasError = true
 }
-
-type Token struct {
-}

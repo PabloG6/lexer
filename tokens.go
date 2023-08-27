@@ -52,3 +52,11 @@ type TokenType struct {
 	Literal interface{}
 	Line    int64
 }
+
+func NewTokenType(token TOKEN, lexeme string, line int64) TokenType {
+	return TokenType{
+		Type:   token,
+		Lexeme: lexeme,
+		Line:   line,
+	}
+}

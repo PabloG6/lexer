@@ -2,10 +2,10 @@ package main
 
 type Scanner struct {
 	Source  string
-	Tokens  []Token
+	Tokens  []TokenType
 	current int
 	start   int
-	line    int
+	line    int64
 }
 
 func NewScanner(source string) *Scanner {
@@ -17,7 +17,7 @@ func NewScanner(source string) *Scanner {
 }
 func (s *Scanner) ScanTokens() {
 	for {
-		if s.current >= len(s.Tokens) {
+		if s.IsAtEnd() {
 			break
 		}
 
@@ -55,17 +55,91 @@ func (s *Scanner) ScanToken() {
 	case ';':
 		s.AddToken(SEMICOLON)
 		break
+	case '!':
+		if s.match('=') {
+			s.AddToken(BANG_EQUAL)
+		} else {
+			s.AddToken(BANG)
+		}
+		break
+
+	case '=':
+		break
+	case '>':
+		if s.match('=') {
+			s.AddToken(GREATER_EQUAL)
+		} else {
+			s.AddToken(GREATER)
+		}
+		break
+	case '/':
+		if s.match('/') {
+			for {
+				if s.peek() != '\n' && !s.IsAtEnd() {
+					s.advanceCharacter()
+					continue
+				}
+				break
+			}
+		} else {
+			s.AddToken(SLASH)
+		}
+
+		break
+	case '<':
+		if s.match('=') {
+			s.AddToken(LESS_EQUAL)
+		} else {
+			s.AddToken(LESS)
+		}
+
+		break
 	case '*':
 		s.AddToken(STAR)
 		break
+	case ' ':
+	case '\r':
+	case '\t':
+		// Ignore whitespace.
+		break
+	case '\n':
+		s.line++
+		break
+	default:
+
 	}
 }
 
-func (s *Scanner) advanceCharacter() uint8 {
+func (s *Scanner) advanceCharacter() rune {
 	s.current++
-	return s.Source[s.current]
+	return rune(s.Source[s.current])
 }
 
 func (s *Scanner) AddToken(t TOKEN) {
 	text := s.Source[s.start:s.current]
+	s.Tokens = append(s.Tokens, NewTokenType(t, text, s.line))
+}
+
+func (s *Scanner) IsAtEnd() bool {
+	return s.current >= len(s.Source)
+}
+func (s *Scanner) match(c rune) bool {
+	if s.IsAtEnd() {
+		return false
+	}
+
+	if rune(s.Source[s.current]) != c {
+		return false
+	}
+
+	s.current++
+	return true
+}
+
+func (s *Scanner) peek() rune {
+	if s.IsAtEnd() {
+		return rune(0)
+	}
+
+	return rune(s.Source[s.current])
 }
