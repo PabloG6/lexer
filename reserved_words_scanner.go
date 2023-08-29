@@ -1,27 +1,29 @@
 package main
 
-var RESERVE_WORDS = make(map[string]TOKEN)
+import "lexer/lexer"
+
+var RESERVE_WORDS = make(map[string]lexer.TOKEN)
 
 func init() {
-	RESERVE_WORDS["else"] = ELSE
-	RESERVE_WORDS["and"] = AND
-	RESERVE_WORDS["class"] = CLASS
-	RESERVE_WORDS["else"] = ELSE
-	RESERVE_WORDS["false"] = FALSE
-	RESERVE_WORDS["for"] = FOR
-	RESERVE_WORDS["fun"] = FUN
-	RESERVE_WORDS["if"] = IF
-	RESERVE_WORDS["nil"] = NIL
-	RESERVE_WORDS["or"] = OR
-	RESERVE_WORDS["print"] = PRINT
-	RESERVE_WORDS["return"] = RETURN
-	RESERVE_WORDS["super"] = SUPER
-	RESERVE_WORDS["this"] = THIS
-	RESERVE_WORDS["true"] = TRUE
-	RESERVE_WORDS["var"] = VAR
-	RESERVE_WORDS["while"] = WHILE
+	RESERVE_WORDS["else"] = lexer.ELSE
+	RESERVE_WORDS["and"] = lexer.AND
+	RESERVE_WORDS["class"] = lexer.CLASS
+	RESERVE_WORDS["else"] = lexer.ELSE
+	RESERVE_WORDS["false"] = lexer.FALSE
+	RESERVE_WORDS["for"] = lexer.FOR
+	RESERVE_WORDS["fun"] = lexer.FUN
+	RESERVE_WORDS["if"] = lexer.IF
+	RESERVE_WORDS["nil"] = lexer.NIL
+	RESERVE_WORDS["or"] = lexer.OR
+	RESERVE_WORDS["print"] = lexer.PRINT
+	RESERVE_WORDS["return"] = lexer.RETURN
+	RESERVE_WORDS["super"] = lexer.SUPER
+	RESERVE_WORDS["this"] = lexer.THIS
+	RESERVE_WORDS["true"] = lexer.TRUE
+	RESERVE_WORDS["var"] = lexer.VAR
+	RESERVE_WORDS["while"] = lexer.WHILE
 }
-func (s *Scanner) parseIdentifier() {
+func (s *lexer.Scanner) parseIdentifier() {
 	for {
 		if s.isAlphaNumeric(s.peek()) {
 			s.advanceCharacter()
@@ -33,7 +35,7 @@ func (s *Scanner) parseIdentifier() {
 		if ok {
 			s.AddToken(identifier)
 		} else {
-			s.AddToken(IDENTIFIER)
+			s.AddToken(lexer.IDENTIFIER)
 		}
 
 		break

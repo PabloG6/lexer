@@ -1,4 +1,4 @@
-package main
+package lexer
 
 type TOKEN int64
 

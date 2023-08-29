@@ -1,11 +1,11 @@
-package main
+package lexer
 
 import (
 	"fmt"
 	"unicode"
 )
 
-type Scanner struct {
+type Lexer struct {
 	Source  string
 	Tokens  []TokenType
 	current int
@@ -13,14 +13,14 @@ type Scanner struct {
 	line    int64
 }
 
-func NewScanner(source string) *Scanner {
-	return &Scanner{
+func NewLexer(source string) *Lexer {
+	return &Lexer{
 		current: 0,
 		start:   0,
 		line:    1,
 	}
 }
-func (s *Scanner) ScanTokens() {
+func (s *Lexer) ScanTokens() {
 	for {
 		if s.IsAtEnd() {
 			break
@@ -30,7 +30,7 @@ func (s *Scanner) ScanTokens() {
 	}
 }
 
-func (s *Scanner) ScanToken() {
+func (s *Lexer) ScanToken() {
 	var c = s.advanceCharacter()
 	switch c {
 	case '(':
@@ -146,9 +146,9 @@ func (s *Scanner) ScanToken() {
 
 /*
 *
-look ahead . characters is numbers.
+look ahead . to see if characters are numbers.
 */
-func (s *Scanner) peekNext() rune {
+func (s *Lexer) peekNext() rune {
 	if s.current+1 >= len(s.Source) {
 		return rune(0)
 
@@ -157,7 +157,7 @@ func (s *Scanner) peekNext() rune {
 	return rune(s.Source[s.current+1])
 }
 
-func (s *Scanner) CaptureNumber() {
+func (s *Lexer) CaptureNumber() {
 	for {
 		if s.IsNumber(s.peek()) {
 			s.advanceCharacter()
@@ -173,29 +173,29 @@ func (s *Scanner) CaptureNumber() {
 		}
 	}
 }
-func (s *Scanner) IsNumber(c rune) bool {
+func (s *Lexer) IsNumber(c rune) bool {
 
 	return unicode.IsDigit(c)
 }
 
-func (s *Scanner) AddStringToken(t TOKEN, val string) {
+func (s *Lexer) AddStringToken(t TOKEN, val string) {
 	s.Tokens = append(s.Tokens, NewTokenType(t, val, s.line))
 }
 
-func (s *Scanner) advanceCharacter() rune {
+func (s *Lexer) advanceCharacter() rune {
 	s.current++
 	return rune(s.Source[s.current])
 }
 
-func (s *Scanner) AddToken(t TOKEN) {
+func (s *Lexer) AddToken(t TOKEN) {
 	text := s.Source[s.start:s.current]
 	s.Tokens = append(s.Tokens, NewTokenType(t, text, s.line))
 }
 
-func (s *Scanner) IsAtEnd() bool {
+func (s *Lexer) IsAtEnd() bool {
 	return s.current >= len(s.Source)
 }
-func (s *Scanner) match(c rune) bool {
+func (s *Lexer) match(c rune) bool {
 	if s.IsAtEnd() {
 		return false
 	}
@@ -208,7 +208,7 @@ func (s *Scanner) match(c rune) bool {
 	return true
 }
 
-func (s *Scanner) peek() rune {
+func (s *Lexer) peek() rune {
 	if s.IsAtEnd() {
 		return rune(0)
 	}
@@ -216,12 +216,12 @@ func (s *Scanner) peek() rune {
 	return rune(s.Source[s.current])
 }
 
-func (s *Scanner) IsAlpha(c rune) bool {
+func (s *Lexer) IsAlpha(c rune) bool {
 	return (c >= 'a' && c <= 'z') ||
 		(c >= 'A' && c <= 'Z') ||
 		c == '_'
 }
 
-func (s *Scanner) isAlphaNumeric(c rune) bool {
+func (s *Lexer) isAlphaNumeric(c rune) bool {
 	return s.IsAlpha(c) || s.IsNumber(c)
 }
